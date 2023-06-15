@@ -71,14 +71,17 @@ const SignupScreen = () => {
         .then((res) => {
             setLoading(false);
             // console.log(res?.data?.message,"success response")
-            if(res?.data?.message === 'Signup successful'){
+            if(res?.data?.message === 'user created successfully'){
               //redirect to login screen
                 navigation.navigate('Login');
+            }
+            else{
+                Alert.alert('Registration Failed', res?.data?.message);
             }
         })
         .catch((err) => {
             setLoading(false);
-            console.log(err,"catch err");
+            console.log(err,"catch error");
             alert(err?.response?.data?.message===undefined ? "Network Error" : err?.response?.data?.message);
         })
     }

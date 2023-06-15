@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import tw from 'tailwind-react-native-classnames';
@@ -9,7 +8,6 @@ import axios from 'axios';
 import Menu from '../components/Menu';
 
 const CarRegistrationScreen = () => {
-  const navigation = useNavigation();
   const [modelName, setModelName] = useState('');
   const [price, setPrice] = useState('');
   const [owner, setOwner] = useState('');
