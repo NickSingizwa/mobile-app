@@ -61,10 +61,12 @@ const SignupScreen = () => {
       //change the loading state and call api to register user
         setLoading(true);
         axios.post(API_URL+'/user/register', {
-          fullName: names,
+          names,
           phoneNumber: phone,
-          email: email,
-          password: pass
+          email,
+          password: pass,
+          reEnterPassword: confirmpass,
+          nationalID: nid
         })
         .then((res) => {
             setLoading(false);

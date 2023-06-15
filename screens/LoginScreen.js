@@ -53,7 +53,7 @@ const LoginScreen = () => {
         } catch (error) {
           console.log(error,"catch error")
           setLoading(false);
-          Alert.alert('Login Failed', error?.response?.data?.message);
+          Alert.alert('Login Failed', error?.message);
         }
     }
 
@@ -69,7 +69,7 @@ const LoginScreen = () => {
                 <View style={styles.form}>
                 <CustomInput value={email} placeholder="Your Email" icon="mail" keyBoardType="email-address" onChange={handleEmailChange}/>
                 <CustomInput value={password} placeholder="Password" icon="lock" keyBoardType="default" HiddenText onChange={handlePassChange}/>
-                <CustomButton text={loading ? 'Signing in ...' : 'Signin'} onPress={handleProceedLogin} bg='#092468' color='white'/>
+                <CustomButton text={loading ? 'Signing in ...' : 'Sign in'} onPress={handleProceedLogin} bg='#092468' color='white'/>
                 </View>
                 <Text style={tw`mb-4`}>Don't have an account? <Text style={[tw`underline`,{color: "#092468"}]} onPress={()=>navigation.navigate('Signup')}>Register</Text></Text>
             </View>

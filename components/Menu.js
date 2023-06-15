@@ -12,16 +12,16 @@ const Menu = () => {
           <Icon name="home" size={26} />
         </TouchableOpacity>
   
-        <TouchableOpacity style={tw`flex items-center justify-center`}>
+        <TouchableOpacity onPress={()=>navigation.navigate('CarRegistration')} style={tw`flex items-center justify-center`}>
           <Icon name="car" size={22} />
         </TouchableOpacity>
   
         <TouchableOpacity onPress={()=>navigation.navigate('Home')} style={tw`flex items-center justify-center`}>
-          <Icon name="History" size={24}/>
+          <Icon name="history" size={24}/>
         </TouchableOpacity>
   
         <TouchableOpacity style={tw`flex items-center justify-center`}>
-          <Icon name="person" size={24} />
+          <Icon name="user" size={24} />
         </TouchableOpacity>
   
       </View>
