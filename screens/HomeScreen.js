@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
 import { Text, View , FlatList, TouchableOpacity, SafeAreaView, Image } from 'react-native'
 import tw from 'tailwind-react-native-classnames';
 import Menu from '../components/Menu';
@@ -44,15 +43,14 @@ const data = [
     },
 ]
 
-const NearbyRestaurants = () => {
-    const navigation = useNavigation();
+const HomeScreen = () => {
 
   return (
     <SafeAreaView style={tw`flex-1`}>
-        <Text style={{color: '#F7941D', marginTop: 40, marginLeft: 35, marginBottom: 18}}>Nearby Restaurants</Text>
+        <Text style={{color: '#F7941D', marginTop: 40, marginLeft: 35, marginBottom: 18}}>Registered cars</Text>
 
         <FlatList data={data} keyExtractor={(item) => item.id} renderItem={({item: {Title,subTitle,image}})=>(
-            <TouchableOpacity onPress={()=>navigation.navigate('Search')} style={[tw`flex-row items-center px-3 py-2 mt-4 rounded-xl mx-8`,{backgroundColor: '#F8F8FB'}]}>
+            <TouchableOpacity style={[tw`flex-row items-center px-3 py-2 mt-4 rounded-xl mx-8`,{backgroundColor: '#F8F8FB'}]}>
             <Image
                 style={tw`rounded p-3 mr-4 w-16 h-16`}
                 source={image}
@@ -72,4 +70,4 @@ const NearbyRestaurants = () => {
   )
 }
 
-export default NearbyRestaurants
+export default HomeScreen

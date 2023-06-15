@@ -1,10 +1,10 @@
 import React,{useState} from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
 import tw from 'tailwind-react-native-classnames';
-import API_URL from '../utils/api';
+import {API_URL} from '../utils/api';
 import axios from 'axios';
 
 const SignupScreen = () => {
@@ -12,7 +12,9 @@ const SignupScreen = () => {
     const [names, setNames] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [confirmpass, setConfirmpass] = useState('');
     const [phone, setPhone] = useState('');
+    const [nid, setNid] = useState('');
     const [loading, setLoading] = useState(false);
   
     const handleNameChange = (text) => {
@@ -26,16 +28,37 @@ const SignupScreen = () => {
     const handlePhoneChange = (text) => {
       setPhone(text);
     };
+
+    const handleNidChange = (text) => {
+      setNid(text);
+    };
   
     const handlePassChange = (text) => {
       setPass(text);
     };
+
+    const handleConfirmPassChange = (text) => {
+      setConfirmpass(text);
+    };
  
     const handleProceed = ()=>{
+      //check if any of the field is empty
       if (!names || !email || !phone || !pass) {
         Alert.alert('Error', 'Please provide all fields');
         return;
       }
+      //check if password length is less than 6
+      if (pass.length < 6) {
+        Alert.alert('Error', 'Password must be at least 6 characters');
+        return;
+      }
+      //check if password and confirm password match
+      if (pass !== confirmpass) {
+        Alert.alert('Error', 'Password and Confirm Password must match');
+        return;
+      }
+
+      //change the loading state and call api to register user
         setLoading(true);
         axios.post(API_URL+'/user/register', {
           fullName: names,
@@ -47,6 +70,7 @@ const SignupScreen = () => {
             setLoading(false);
             // console.log(res?.data?.message,"success response")
             if(res?.data?.message === 'Signup successful'){
+              //redirect to login screen
                 navigation.navigate('Login');
             }
         })
@@ -62,25 +86,19 @@ const SignupScreen = () => {
         <View style={styles.container}>
             <View style={styles.subcontainer}>
             <View style={styles.minicontainer}>
-                <Text style={styles.text}>Supa<Text style={styles.span}>Menu</Text></Text>
+                <Text style={styles.text}>App Title</Text>
                 <View style={styles.microcontainer}>
-                <Text style={styles.subtitles}>Welcome...</Text>
-                <Text style={tw`text-gray-600`}>please fill in the information</Text>
+                <Text style={styles.subtitles}>Create account</Text>
                 </View>
                 <View style={styles.form}>
-                <CustomInput value={names} placeholder="Full Name" icon="user" keyBoardType="default" onChange={handleNameChange}/>
-                <CustomInput value={phone} placeholder="Phone Number" icon="phone" keyBoardType='numeric' onChange={handlePhoneChange}/>
-                <CustomInput value={email} placeholder="Your Email" icon="mail" keyBoardType="email-address" onChange={handleEmailChange}/>
-                <CustomInput value={pass} placeholder="Password" icon="lock" keyBoardType="default" HiddenText onChange={handlePassChange}/>
-                <CustomButton text={loading ? 'Proceeding ...' : 'Proceed'} onPress={handleProceed} bg='#fc9403' color='white'/>
-                <View style={styles.linecontainer}>
-                    <View style={styles.line} />
-                    <Text style={styles.linetext}>or</Text>
-                    <View style={styles.line} />
-                </View>
-                <Text style={tw`text-gray-600`}>If you have a PMG account</Text>
-                <CustomButton text="sign in" bg='#fc9403' color='white' onPress={()=>navigation.navigate('Login')}/>
-                <Text>Already have an account? <Text style={tw`text-yellow-600 underline`} onPress={()=>navigation.navigate('Login')}>Signin</Text></Text>
+                <CustomInput value={names} placeholder="Full Name" keyBoardType="default" onChange={handleNameChange}/>
+                <CustomInput value={phone} placeholder="Phone Number" keyBoardType='numeric' onChange={handlePhoneChange}/>
+                <CustomInput value={email} placeholder="Your Email" keyBoardType="email-address" onChange={handleEmailChange}/>
+                <CustomInput value={nid} placeholder="National Id" keyBoardType="default" onChange={handleNidChange}/>
+                <CustomInput value={pass} placeholder="Password" keyBoardType="default" HiddenText onChange={handlePassChange}/>
+                <CustomInput value={confirmpass} placeholder="Confirm Password" keyBoardType="default" HiddenText onChange={handleConfirmPassChange}/>
+                <CustomButton text={loading ? 'Creating account ...' : 'Signup'} onPress={handleProceed} bg='#092468' color='white'/>
+                <Text>Already have an account? <Text style={[tw`underline`,{color: "#092468"}]} onPress={()=>navigation.navigate('Login')}>Signin</Text></Text>
                 </View>
             </View>
             </View>
@@ -95,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fc9403',
+    backgroundColor: '#092468',
   },
 
   subcontainer:{

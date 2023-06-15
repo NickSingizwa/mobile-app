@@ -2,29 +2,28 @@ import React from 'react';
 import { View,TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'tailwind-react-native-classnames';
+import { useNavigation } from '@react-navigation/native';
 
 const Menu = () => {
+  const navigation = useNavigation();
     return (
       <View style={tw`bg-white flex-row justify-around items-center h-16 mt-2 rounded-t-3xl mx-2`}>
-        <TouchableOpacity style={tw`flex items-center justify-center`}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Home')} style={tw`flex items-center justify-center`}>
           <Icon name="home" size={26} />
         </TouchableOpacity>
   
         <TouchableOpacity style={tw`flex items-center justify-center`}>
-          <Icon name="bell" size={22} />
+          <Icon name="car" size={22} />
+        </TouchableOpacity>
+  
+        <TouchableOpacity onPress={()=>navigation.navigate('Home')} style={tw`flex items-center justify-center`}>
+          <Icon name="History" size={24}/>
         </TouchableOpacity>
   
         <TouchableOpacity style={tw`flex items-center justify-center`}>
-          <Icon name="briefcase" size={24} color='#F7941D'/>
+          <Icon name="person" size={24} />
         </TouchableOpacity>
   
-        <TouchableOpacity style={tw`flex items-center justify-center`}>
-          <Icon name="clock-o" size={24} />
-        </TouchableOpacity>
-  
-        <TouchableOpacity style={tw`flex items-center justify-center`}>
-          <Icon name="shopping-cart" size={24} />
-        </TouchableOpacity>
       </View>
     );
   };

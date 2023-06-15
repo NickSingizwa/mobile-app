@@ -5,10 +5,10 @@ import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
 import tw from 'tailwind-react-native-classnames';
 import * as SecureStore from 'expo-secure-store';
-import API_URL from '../utils/api';
+import {API_URL} from '../utils/api';
 import axios from 'axios';
 
-const SignupScreen = () => {
+const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
@@ -23,11 +23,13 @@ const SignupScreen = () => {
     };
  
     const handleProceedLogin = async ()=>{
+      //check if all fields are entered
         if (!email || !password) {
           Alert.alert('Validation Error', 'Please enter both email and password.');
           return;
         }
     
+        //change the loading state and make login request to backend
         setLoading(true);
         try {
           const response = await axios.post(API_URL+'/user/login', {
@@ -36,15 +38,16 @@ const SignupScreen = () => {
           });
           // console.log("response",response?.data?.token)
           const token = response?.data?.token;
-          await SecureStore.setItemAsync('token', token);
+          await SecureStore.setItemAsync('token', token);    //set token in secure storage
     
           if (token) {
+            //clear all textfields and change the loading state
             setEmail('');
             setPass('');
-      
             setLoading(false);
-            // Alert.alert('Login Successful');
-            navigation.navigate('NearbyRestaurants')
+
+            //redirect to home screen
+            navigation.navigate('Home')
           }
 
         } catch (error) {
@@ -57,27 +60,18 @@ const SignupScreen = () => {
   return (
     <ScrollView>
         <View style={styles.container}>
+            <Text style={styles.text}>App Title</Text>
             <View style={styles.subcontainer}>
             <View style={styles.minicontainer}>
-                <Text style={styles.text}>Supa<Text style={styles.span}>Menu</Text></Text>
                 <View style={styles.microcontainer}>
-                <Text style={styles.subtitles}>Welcome...</Text>
-                <Text style={tw`text-gray-600`}>Sign in to continue</Text>
+                <Text style={styles.subtitles}>Login</Text>
                 </View>
                 <View style={styles.form}>
                 <CustomInput value={email} placeholder="Your Email" icon="mail" keyBoardType="email-address" onChange={handleEmailChange}/>
                 <CustomInput value={password} placeholder="Password" icon="lock" keyBoardType="default" HiddenText onChange={handlePassChange}/>
-                <CustomButton text={loading ? 'Signing in ...' : 'Signin'} onPress={handleProceedLogin} bg='#fc9403' color='white'/>
-                <View style={styles.linecontainer}>
-                    <View style={styles.line} />
-                    <Text style={styles.linetext}>or</Text>
-                    <View style={styles.line} />
+                <CustomButton text={loading ? 'Signing in ...' : 'Signin'} onPress={handleProceedLogin} bg='#092468' color='white'/>
                 </View>
-                <CustomButton text="Login with Google" border='border border-gray-500' color='gray'/>
-                <CustomButton text="Login with Facebook" border='border border-gray-500' color='gray'/>
-                <Text style={tw`text-yellow-600 mb-5`}>Forgot Password?</Text>
-                <Text>Don't have an account? <Text style={tw`text-yellow-600 underline`} onPress={()=>navigation.navigate('Signup')}>Register</Text></Text>
-                </View>
+                <Text style={tw`mb-4`}>Don't have an account? <Text style={[tw`underline`,{color: "#092468"}]} onPress={()=>navigation.navigate('Signup')}>Register</Text></Text>
             </View>
             </View>
         </View>
@@ -91,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fc9403',
+    backgroundColor: '#092468',
   },
 
   subcontainer:{
@@ -101,7 +95,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius:30,
     width:'100%',
-    marginTop: 80,
+    height: 350,
+    marginTop: 130,
     backgroundColor: '#ffff',
   },
 
@@ -119,6 +114,8 @@ const styles = StyleSheet.create({
   text:{
     fontSize:30,
     fontWeight:900,
+    color: "white",
+    marginTop: 120
   },
 
   span:{
@@ -136,9 +133,10 @@ const styles = StyleSheet.create({
 
   form:{
     flex: 1,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     width:'100%',
-    padding:20
+    padding:20,
   },
 
   linecontainer: {
@@ -162,4 +160,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default SignupScreen
+export default LoginScreen
