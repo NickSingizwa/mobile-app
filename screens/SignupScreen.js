@@ -9,6 +9,7 @@ import axios from 'axios';
 
 const SignupScreen = () => {
     const navigation = useNavigation();
+    //form properties states
     const [names, setNames] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
@@ -17,6 +18,7 @@ const SignupScreen = () => {
     const [nid, setNid] = useState('');
     const [loading, setLoading] = useState(false);
   
+    //handling input changes
     const handleNameChange = (text) => {
       setNames(text);
     };
@@ -41,6 +43,7 @@ const SignupScreen = () => {
       setConfirmpass(text);
     };
  
+    //on signu up button click
     const handleProceed = ()=>{
       //check if any of the field is empty
       if (!names || !email || !phone || !pass) {

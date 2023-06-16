@@ -20,6 +20,7 @@ import NearbyImage from '../assets/image.png'
 const HomeScreen = () => {
     const [data, setData] = useState([]);
 
+    //fetch data on component mount
     useEffect(() => {
         fetchData();
     }, []);
@@ -29,6 +30,8 @@ const HomeScreen = () => {
         try {
             const response = await axios.get(`${API_URL}/vehicle/all`,config);
             // console.log(response?.data?.data?.vehicles,"response");
+
+            //populate the data array with the received response 
             setData(response?.data?.data?.vehicles);
         } catch (error) {
             console.log(error,"catch error");
@@ -38,6 +41,7 @@ const HomeScreen = () => {
     <SafeAreaView style={tw`flex-1`}>
         <Text style={{color: '#F7941D', marginTop: 40, marginLeft: 35, marginBottom: 10}}>Registered cars</Text>
 
+        {/* mapping the data */}
         <FlatList data={data} keyExtractor={(item) => item._id} renderItem={({item: {modelName,price,manufactureCompany,photo,manufactureYear}})=>(
             <TouchableOpacity style={[tw`flex-row items-center px-3 py-2 mt-4 rounded-xl mx-8`,{backgroundColor: '#F8F8FB'}]}>
             <Image

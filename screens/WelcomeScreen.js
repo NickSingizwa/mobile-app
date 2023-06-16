@@ -3,6 +3,7 @@ import { View,Text,SafeAreaView,StyleSheet } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 const WelcomeScreen = ({ navigation }) => {
+  //set timer(3seconds) to redirect to signup screen
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate('Signup');

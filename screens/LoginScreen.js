@@ -10,6 +10,7 @@ import axios from 'axios';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
+    //form inputs handling
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [loading, setLoading] = useState(false);
@@ -22,6 +23,7 @@ const LoginScreen = () => {
       setPass(text);
     };
  
+    //on login button click
     const handleProceedLogin = async ()=>{
       //check if all fields are entered
         if (!email || !password) {

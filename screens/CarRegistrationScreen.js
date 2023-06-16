@@ -10,18 +10,20 @@ import axios from 'axios';
 import Menu from '../components/Menu';
 
 const CarRegistrationScreen = () => {
+  //form input states
   const [modelName, setModelName] = useState('');
   const [price, setPrice] = useState('');
   const [owner, setOwner] = useState('');
   const [year, setYear] = useState('');
   const [company, setCompany] = useState('');
   const [photo, setPhoto] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  //loading state with initial state set to false
 
   useEffect(() => {
     getPermission();
   }, []);
 
+  // Request permission to access the photo library
   const getPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -29,6 +31,7 @@ const CarRegistrationScreen = () => {
     }
   };
 
+  //handle input change
   const handleModelNameChange = (text) => {
     setModelName(text);
   };
@@ -49,6 +52,7 @@ const CarRegistrationScreen = () => {
     setCompany(text);
   };
 
+   // Handle photo upload
   const handlePhotoUpload = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -57,11 +61,13 @@ const CarRegistrationScreen = () => {
       quality: 1,
     });
   
+    //if there is a photo url found in the assets array
     if (!result.canceled && result.assets.length > 0) {
       setPhoto(result.assets[0].uri);
     }
   };
   
+  // Handle car registration
   const handleProceed = async () => {
     if (!modelName || !price || !company || !owner || !year || !photo) {
       Alert.alert('Error', 'Please provide all fields and upload a photo');
@@ -73,6 +79,7 @@ const CarRegistrationScreen = () => {
     setLoading(true);
   
     const formData = new FormData();
+    //append all field values to the form data
     formData.append('photo', {
       uri: photo,
       name: 'photo',
