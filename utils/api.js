@@ -1,13 +1,16 @@
 import * as SecureStore from "expo-secure-store";
 
-export const API_URL = 'http://192.168.0.124:5000/api/v1';
+export const API_URL = 'http://192.168.8.118:5000/api/v1';
 
-export const config = {
+export async function getConfig() {
+  const token = await SecureStore.getItemAsync("token");
+  return {
     headers: {
-      Authorization: "Bearer " + SecureStore.getItemAsync("token"),
+      Authorization: "Bearer " + token,
     },
-};
+  };
+}
 
 export async function logOut() {
-  await SecureStore.deleteItemAsync("token")
+  await SecureStore.deleteItemAsync("token");
 }

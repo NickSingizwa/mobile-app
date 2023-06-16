@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Alert, Image, ScrollView } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import tw from 'tailwind-react-native-classnames';
-import { API_URL,config } from '../utils/api';
+import { API_URL, getConfig } from '../utils/api';
 import axios from 'axios';
 import Menu from '../components/Menu';
 
@@ -13,7 +15,19 @@ const CarRegistrationScreen = () => {
   const [owner, setOwner] = useState('');
   const [year, setYear] = useState('');
   const [company, setCompany] = useState('');
+  const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getPermission();
+  }, []);
+
+  const getPermission = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission Required', 'Please allow access to the photo library');
+    }
+  };
 
   const handleModelNameChange = (text) => {
     setModelName(text);
@@ -35,53 +49,126 @@ const CarRegistrationScreen = () => {
     setCompany(text);
   };
 
-  const handleProceed = () => {
-    //check if any of the field is empty
-    if (!modelName || !price || !company || !owner || !year) {
-      Alert.alert('Error', 'Please provide all fields');
+  const handlePhotoUpload = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled && result.assets.length > 0) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+  
+  const handleProceed = async () => {
+    if (!modelName || !price || !company || !owner || !year || !photo) {
+      Alert.alert('Error', 'Please provide all fields and upload a photo');
       return;
     }
-
-    //change the loading state and call api to register user
+  
+    const config = await getConfig();
+  
     setLoading(true);
+  
+    const formData = new FormData();
+    formData.append('photo', {
+      uri: photo,
+      name: 'photo',
+      type: 'image/*',
+    });
+  
+    formData.append('manufactureCompany', company);
+    formData.append('manufactureYear', year);
+    formData.append('price', price);
+    formData.append('modelName', modelName);
+    formData.append('owner', "648c1f44eacf8653b61635e4");
+  
     axios
-      .post(API_URL + '/vehicle', {
-        manufactureCompany: company,
-        manufactureYear: year,
-        price,
-        modelName,
-        owner,
-      },config)
+      .post(API_URL + '/vehicle', formData, {
+        headers: {
+          ...config,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((res) => {
         setLoading(false);
-        // console.log(res?.data?.message,"success response")
         if (res?.data?.message === 'Vehicle registered successfully') {
-          //clear all fields and alert success
-            setModelName('');
-            setPrice('');
-            setOwner('');
-            setYear('');
-            setCompany('');
-            Alert.alert('Success', res?.data?.message);
-        }
-        else{
-            Alert.alert('Error', res?.data?.message);
+          setModelName('');
+          setPrice('');
+          setOwner('');
+          setYear('');
+          setCompany('');
+          setPhoto(null);
+          Alert.alert('Success', res?.data?.message);
+        } else {
+          Alert.alert('Error', res?.data?.message);
         }
       })
       .catch((err) => {
         setLoading(false);
         console.log(err, 'catch err');
         alert(
-          err?.response?.data?.message === undefined
-            ? 'Network Error'
-            : err?.response?.data?.message
+          err?.response?.data?.message === undefined ? 'Network Error' : err?.response?.data?.message
         );
       });
   };
+  
+
+  // const handleProceed = async () => {
+  //   // check if any of the field is empty
+  //   if (!modelName || !price || !company || !owner || !year || !photo) {
+  //     Alert.alert('Error', 'Please provide all fields and upload a photo');
+  //     return;
+  //   }
+
+  //   const config = await getConfig(); // retrieving token
+
+  //   setLoading(true);
+  //   axios
+  //     .post(
+  //       API_URL + '/vehicle',
+  //       {
+  //         photo,
+  //         manufactureCompany: company,
+  //         manufactureYear: year,
+  //         price,
+  //         modelName,
+  //         owner: "648c1f44eacf8653b61635e4",
+  //       },
+  //       config
+  //     )
+  //     .then((res) => {
+  //       setLoading(false);
+  //       if (res?.data?.message === 'Vehicle registered successfully') {
+  //         setModelName('');
+  //         setPrice('');
+  //         setOwner('');
+  //         setYear('');
+  //         setCompany('');
+  //         setPhoto(null);
+  //         Alert.alert('Success', res?.data?.message);
+  //       } else {
+  //         Alert.alert('Error', res?.data?.message);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setLoading(false);
+  //       console.log(err, 'catch err');
+  //       alert(
+  //         err?.response?.data?.message === undefined ? 'Network Error' : err?.response?.data?.message
+  //       );
+  //     });
+  // };
 
   return (
-    <View style={styles.container}>
-      <View style={tw`flex-1`}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+    >
+      <ScrollView style={tw`flex-1`}>
         <View style={styles.content}>
           <View style={styles.minicontainer}>
             <Text style={styles.text}>App Title</Text>
@@ -120,6 +207,14 @@ const CarRegistrationScreen = () => {
                 onChange={handleCompanyChange}
               />
               <CustomButton
+                text="Upload Photo"
+                onPress={handlePhotoUpload}
+                // bg="#092468"
+                color="gray"
+                border="border border-gray-400"
+              />
+              {photo && <Image source={{ uri: photo }} style={styles.previewImage} />}
+              <CustomButton
                 text={loading ? 'Registering car ...' : 'Register Car'}
                 onPress={handleProceed}
                 bg="#092468"
@@ -128,11 +223,11 @@ const CarRegistrationScreen = () => {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.menuContainer}>
         <Menu />
       </View>
-    </View>
+      </KeyboardAwareScrollView>
   );
 };
 
@@ -174,6 +269,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '95%',
     padding: 20,
+    paddingLeft: 10
+  },
+  previewImage: {
+    width: 200,
+    height: 200,
+    marginVertical: 10,
+    borderRadius: 10,
   },
 });
 
