@@ -12,8 +12,8 @@ const SignupScreen = () => {
     //form properties states
     const [names, setNames] = useState('');
     const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
-    const [confirmpass, setConfirmpass] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [nid, setNid] = useState('');
     const [loading, setLoading] = useState(false);
@@ -35,28 +35,28 @@ const SignupScreen = () => {
       setNid(text);
     };
   
-    const handlePassChange = (text) => {
-      setPass(text);
+    const handlePasswordChange = (text) => {
+      setPassword(text);
     };
 
-    const handleConfirmPassChange = (text) => {
-      setConfirmpass(text);
+    const handleConfirmPasswordChange = (text) => {
+      setConfirmPassword(text);
     };
  
     //on signu up button click
     const handleProceed = ()=>{
       //check if any of the field is empty
-      if (!names || !email || !phone || !pass) {
+      if (!names || !email || !phone || !password) {
         Alert.alert('Error', 'Please provide all fields');
         return;
       }
       //check if password length is less than 6
-      if (pass.length < 6) {
+      if (password.length < 6) {
         Alert.alert('Error', 'Password must be at least 6 characters');
         return;
       }
       //check if password and confirm password match
-      if (pass !== confirmpass) {
+      if (password !== confirmPassword) {
         Alert.alert('Error', 'Password and Confirm Password must match');
         return;
       }
@@ -67,8 +67,8 @@ const SignupScreen = () => {
           names,
           phoneNumber: phone,
           email,
-          password: pass,
-          reEnterPassword: confirmpass,
+          password: password,
+          reEnterPassword: confirmPassword,
           nationalID: nid
         })
         .then((res) => {
@@ -103,8 +103,8 @@ const SignupScreen = () => {
                 <CustomInput value={phone} placeholder="Phone Number" keyBoardType='numeric' onChange={handlePhoneChange}/>
                 <CustomInput value={email} placeholder="Your Email" keyBoardType="email-address" onChange={handleEmailChange}/>
                 <CustomInput value={nid} placeholder="National Id" keyBoardType="default" onChange={handleNidChange}/>
-                <CustomInput value={pass} placeholder="Password" keyBoardType="default" HiddenText onChange={handlePassChange}/>
-                <CustomInput value={confirmpass} placeholder="Confirm Password" keyBoardType="default" HiddenText onChange={handleConfirmPassChange}/>
+                <CustomInput value={password} placeholder="Password" keyBoardType="default" HiddenText onChange={handlePasswordChange}/>
+                <CustomInput value={confirmPassword} placeholder="Confirm Password" keyBoardType="default" HiddenText onChange={handleConfirmPasswordChange}/>
                 <CustomButton text={loading ? 'Creating account ...' : 'Signup'} onPress={handleProceed} bg='#092468' color='white'/>
                 <Text>Already have an account? <Text style={[tw`underline`,{color: "#092468"}]} onPress={()=>navigation.navigate('Login')}>Signin</Text></Text>
                 </View>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View,Text,SafeAreaView,StyleSheet } from 'react-native';
+import { Text,SafeAreaView,StyleSheet } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 const WelcomeScreen = ({ navigation }) => {

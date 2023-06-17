@@ -12,7 +12,7 @@ const LoginScreen = () => {
     const navigation = useNavigation();
     //form inputs handling
     const [email, setEmail] = useState('');
-    const [password, setPass] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
   
     const handleEmailChange = (text) => {
@@ -20,7 +20,7 @@ const LoginScreen = () => {
     };
   
     const handlePassChange = (text) => {
-      setPass(text);
+      setPassword(text);
     };
  
     //on login button click
@@ -45,7 +45,7 @@ const LoginScreen = () => {
           if (token) {
             //clear all textfields and change the loading state
             setEmail('');
-            setPass('');
+            setPassword('');
             setLoading(false);
 
             //redirect to home screen
