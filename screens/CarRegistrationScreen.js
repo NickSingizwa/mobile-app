@@ -63,7 +63,7 @@ const CarRegistrationScreen = () => {
   
     //if there is a photo url found in the assets array
     if (!result.canceled && result.assets.length > 0) {
-      setPhoto(result.assets[0].uri);
+      setPhoto(result.assets[0].uri);gtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttfggyuiooooooo
     }
   };
   
@@ -101,6 +101,7 @@ const CarRegistrationScreen = () => {
       })
       .then((res) => {
         setLoading(false);
+        console.log(res,"resss")
         if (res?.data?.message === 'Vehicle registered successfully') {
           setModelName('');
           setPrice('');
@@ -125,8 +126,8 @@ const CarRegistrationScreen = () => {
 
   // const handleProceed = async () => {
   //   // check if any of the field is empty
-  //   if (!modelName || !price || !company || !owner || !year || !photo) {
-  //     Alert.alert('Error', 'Please provide all fields and upload a photo');
+  //   if (!modelName || !price || !company || !owner || !year) {
+  //     Alert.alert('Error', 'Please provide all fields');
   //     return;
   //   }
 
@@ -137,7 +138,6 @@ const CarRegistrationScreen = () => {
   //     .post(
   //       API_URL + '/vehicle',
   //       {
-  //         photo,
   //         manufactureCompany: company,
   //         manufactureYear: year,
   //         price,
@@ -154,7 +154,6 @@ const CarRegistrationScreen = () => {
   //         setOwner('');
   //         setYear('');
   //         setCompany('');
-  //         setPhoto(null);
   //         Alert.alert('Success', res?.data?.message);
   //       } else {
   //         Alert.alert('Error', res?.data?.message);

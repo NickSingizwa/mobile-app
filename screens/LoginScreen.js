@@ -55,7 +55,7 @@ const LoginScreen = () => {
         } catch (error) {
           console.log(error,"catch error")
           setLoading(false);
-          Alert.alert('Login Failed', error?.message);
+          Alert.alert('Login Failed', error?.response?.data?.message === undefined ? 'Network Error' : error?.response?.data?.message);
         }
     }
 
